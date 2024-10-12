@@ -5,7 +5,7 @@ generator client {
 datasource db {
     provider = "postgresql"
     url = env("POSTGRES_URL")
-    directUrl = env("POSTGRES_URL_NON_POOLING") 
+    // directUrl = env("POSTGRES_URL_NON_POOLING") 
 }
 model User {
     id  Int @id @default(autoincrement())
@@ -102,7 +102,7 @@ model CartItem{
    cartId Int
 
    quantite Int 
-   
+
    ingredients Ingredient[]
 
     createdAt DateTime @default(now())
