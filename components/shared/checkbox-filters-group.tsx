@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { FilterChecboxProps, FilterCheckbox } from './filter-checkbox';
-import { Input } from '../ui';
+import { Input, Skeleton } from '../ui';
 
 type Item = FilterChecboxProps;
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   searchInputPlaceholder?: string;
   onClickCheckbox?: (id: string) => void;
   defaultValue?: string[];
-  selected?: Set<string>;
+  selectedIds?: Set<string>;
   className?: string;
   name?: string;
 }
@@ -24,14 +24,28 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
   defaultItems,
   limit,
   searchInputPlaceholder = 'Поиск...',
+  loading,
   defaultValue,
-  selected,
+  selectedIds,
+  onClickCheckbox,
   className,
+  name,
 }) => {
   const [showAll, setShowAll] = useState(false);
 
   const [searchValue, setSearchValue] = useState('');
 
+  if (loading) {
+    return (
+      <div className={className}>
+        <div className="font-bold mb-3">{title}</div>
+        {...Array(limit)
+          .fill(0)
+          .map((_, idx) => <Skeleton key={idx} className="h-6 mb-5 rounded-[8px] " />)}
+        <Skeleton className=" w-28 h-6 mb-5 rounded-[8px] " />
+      </div>
+    );
+  }
   const list = showAll
     ? items.filter((item) => item.text.toLowerCase().includes(searchValue.toLocaleLowerCase()))
     : defaultItems?.slice(0, limit);
@@ -54,12 +68,13 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
       <div className="flex flex-col gap-4 max-h-96 pr-2 overflow-auto scrollbar">
         {list.map((item, index) => (
           <FilterCheckbox
-            onCheckedChange={(ids) => console.log(ids)}
+            onCheckedChange={() => onClickCheckbox?.(item.value)}
             key={index}
-            checked={false}
+            checked={selectedIds?.has(item.value)}
             text={item.text}
             value={item.value}
             endAdornment={item.endAdornment}
+            name={name}
           />
         ))}
       </div>

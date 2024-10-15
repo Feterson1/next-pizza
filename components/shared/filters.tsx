@@ -1,22 +1,28 @@
-import React from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 import { Title } from './title';
 import { FilterCheckbox } from '.';
 import { Input } from '../ui';
 import { RangeSlider } from './range-slider';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
+import { Ingredient } from '@prisma/client';
+import { Api } from '@/services/api-client';
+import { useFilterIngredients } from '@/hooks/useFilterIngredients';
 
 interface Props {
   className?: string;
 }
 
 export const Filters: React.FC<Props> = ({ className }) => {
+  const { ingredients, loading, onAddId, selectedIds } = useFilterIngredients();
+  const items = ingredients.map((item) => ({ value: String(item.id), text: item.name }));
   return (
     <div className={className}>
       <Title text="Фильтрация" size="sm" className="mb-5 font-bold" />
       {/* Верхние чекбоксы */}
       <div className="flex flex-col gap-4">
-        <FilterCheckbox text="Можно собирать" value="1" />
-        <FilterCheckbox text="Новинки" value="2" />
+        <FilterCheckbox name="sd" text="Можно собирать" value="1" />
+        <FilterCheckbox name="sas" text="Новинки" value="2" />
       </div>
       {/* Фильтр цен */}
       <div className="mt-5 border-y border-y-neutral-100 py6 pb-7">
@@ -31,25 +37,12 @@ export const Filters: React.FC<Props> = ({ className }) => {
         title={'Ингридиенты'}
         className="mt-5"
         limit={6}
-        defaultItems={[
-          { text: 'Сырный соус', value: '1' },
-          { text: 'Моццарела', value: '2' },
-          { text: 'Чеснок', value: '3' },
-          { text: 'Солённые огурчики', value: '4' },
-          { text: 'Сырный бортик', value: '5' },
-        ]}
-        items={[
-          { text: 'Сырный соус', value: '1' },
-          { text: 'Моццарела', value: '2' },
-          { text: 'Чеснок', value: '3' },
-          { text: 'Солённые огурчики', value: '4' },
-          { text: 'Сырный бортик', value: '5' },
-          { text: 'Сырный соус', value: '1' },
-          { text: 'Моццарела', value: '2' },
-          { text: 'Чеснок', value: '3' },
-          { text: 'Солённые огурчики', value: '4' },
-          { text: 'Сырный бортик', value: '5' },
-        ]}
+        defaultItems={items.slice(0, 6)}
+        items={items}
+        loading={loading}
+        onClickCheckbox={onAddId}
+        selectedIds={selectedIds}
+        name="ingredients"
       />
       {/*  */}
     </div>
