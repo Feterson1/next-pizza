@@ -22,11 +22,6 @@ export const useIngredients = () => {
     fetchIngredients();
   }, []);
 
-  const setSelectedIngredients = (ids: string[]) => {
-    ids.forEach((id) => {
-      selectedIds.add(id);
-    });
-  };
   return {
     ingredients,
     loading,
