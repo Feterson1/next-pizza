@@ -9,3 +9,5 @@ export { Filters } from './filters';
 export { SearchInput } from './search-input';
 export { PizzaImage } from './pizza-image';
 export * from './modals';
+export { CartButton } from './cart-button';
+export { CartDrawer } from './cart-drawer';
