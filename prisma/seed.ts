@@ -147,7 +147,7 @@ async function up() {
     data: {
       productItemId: 1,
       cartId: 1,
-      quantite: 2,
+      quantity: 2,
       ingredients: {
         connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
       },

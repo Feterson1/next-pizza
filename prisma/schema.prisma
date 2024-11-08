@@ -101,7 +101,7 @@ model CartItem{
    cart Cart @relation(fields: [cartId],references: [id])
    cartId Int
 
-   quantite Int 
+   quantity Int 
 
    ingredients Ingredient[]
 
