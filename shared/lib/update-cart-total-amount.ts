@@ -22,13 +22,15 @@ export const updateCartTotalAmount = async (token: string) => {
       },
     },
   });
+
   if (!userCart) {
-    return undefined;
+    return;
   }
   const totalAmount = userCart?.items.reduce((acc, item) => {
     return acc + calcCartItemTotalPrice(item);
   }, 0);
-  await prisma.cart.update({
+
+  return await prisma.cart.update({
     where: {
       id: userCart.id,
     },
