@@ -81,7 +81,7 @@ model Ingredient {
 model Cart{
     id Int @id @default(autoincrement())
     user User? @relation(fields: [userId],references: [id])
-    userId Int @unique
+    userId Int? @unique
 
     items CartItem[]
 
@@ -101,7 +101,7 @@ model CartItem{
    cart Cart @relation(fields: [cartId],references: [id])
    cartId Int
 
-   quantity Int 
+   quantity Int @default(1)
 
    ingredients Ingredient[]
 
