@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Sheet,
   SheetClose,
@@ -22,15 +22,15 @@ interface Props {
 }
 
 export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children }) => {
-  const [totalAmount, fetchCartItems, items] = useCartStore((state) => [
-    state.totalAmount,
+  const { totalAmount, items, fetchCartItems } = useCartStore();
 
-    state.fetchCartItems,
-    state.items,
-  ]);
   useEffect(() => {
     fetchCartItems();
   }, []);
+
+  const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
+    console.log(id, quantity, type);
+  };
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -44,9 +44,9 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children 
 
         <div className="-mx-6 mt-5 overflow-auto flex-1">
           <div className="mb-2">
-            {items.map((item, idx) => (
+            {items.map((item) => (
               <CartDrawerItem
-                key={idx}
+                key={item.id}
                 id={item.id}
                 imageUrl={item.imageUrl}
                 details={getCartItemDetails(

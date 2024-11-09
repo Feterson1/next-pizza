@@ -5,6 +5,7 @@ export async function GET(req: NextRequest) {
   try {
     const token = req.cookies.get('cartToken')?.value;
     if (!token) {
+      console.log('error token');
       return NextResponse.json({ totalAmount: 0, items: [] });
     }
     const userCart = await prisma.cart.findFirst({
