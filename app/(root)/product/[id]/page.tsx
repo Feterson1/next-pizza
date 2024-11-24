@@ -28,7 +28,7 @@ export default async function ProductPage({ params: { id } }: { params: { id: st
             necessitatibus ipsa vero pariatur aspernatur tempora?
           </p>
           <GrouptVariants
-            selectedValue="2"
+            value="2"
             items={[
               { name: 'Маленькая', value: '1' },
               { name: 'Средняя', value: '2' },
