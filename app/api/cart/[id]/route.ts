@@ -5,8 +5,9 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const id = Number(params.id);
+    console.log(id);
     const data = (await req.json()) as { quantity: number };
-    console.log(data);
+
     const token = req.cookies.get('cartToken')?.value;
     if (!token) {
       return NextResponse.json({ message: 'CartToken not found' });
@@ -14,7 +15,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
     const cartItem = await prisma.cart.findFirst({
       where: {
-        id,
+        token,
       },
     });
 

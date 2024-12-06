@@ -11,3 +11,4 @@ export { PizzaImage } from './pizza-image';
 export * from './modals';
 export { CartButton } from './cart-button';
 export { CartDrawer } from './cart-drawer';
+export { ProductForm } from './product-form';
