@@ -7,3 +7,4 @@ export { Input } from './input';
 export { Dialog } from './dialog';
 export { Popover } from './popover';
 export { Checkbox } from './checkbox';
+export { Textarea } from './textarea';
