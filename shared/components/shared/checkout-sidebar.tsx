@@ -2,23 +2,28 @@ import React from 'react';
 import { WhiteBlock } from './white-block';
 import { CheckoutItemDetails } from './checkout-item-details';
 import { ArrowRight, Package, Percent, Truck } from 'lucide-react';
-import { Button } from '../ui';
+import { Button, Skeleton } from '../ui';
 
 interface Props {
   className?: string;
   totalAmount: number;
+  loading?: boolean;
 }
 const VAT = 15;
 const DELIVERY_PRICE = 300;
 
-export const CheckoutSidebar: React.FC<Props> = ({ className, totalAmount }) => {
+export const CheckoutSidebar: React.FC<Props> = ({ className, loading, totalAmount }) => {
   const vatPrice = (totalAmount * VAT) / 100;
   const totalPrice = totalAmount + DELIVERY_PRICE + vatPrice;
   return (
     <WhiteBlock className="p-6 sticky top-4">
       <div className="flex flex-col gap-1">
         <span className="text-xl">Итого:</span>
-        <span className="text-[34px] font-extrabold">{totalPrice} ₽</span>
+        {loading ? (
+          <Skeleton className="h-11 w-48" />
+        ) : (
+          <span className=" h-11 text-[34px] font-extrabold">{totalPrice} ₽</span>
+        )}
       </div>
       <CheckoutItemDetails
         title={
@@ -26,7 +31,7 @@ export const CheckoutSidebar: React.FC<Props> = ({ className, totalAmount }) => 
             <Package size={16} className="mr-2 text-gray-400" /> Стоимость товаров:
           </div>
         }
-        value={`${totalAmount}`}
+        value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${totalAmount} ₽`}
       />
       <CheckoutItemDetails
         title={
@@ -34,7 +39,7 @@ export const CheckoutSidebar: React.FC<Props> = ({ className, totalAmount }) => 
             <Percent size={16} className="mr-2 text-gray-400" /> Налоги:
           </div>
         }
-        value={`${vatPrice}`}
+        value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${vatPrice} ₽`}
       />
       <CheckoutItemDetails
         title={
@@ -42,7 +47,7 @@ export const CheckoutSidebar: React.FC<Props> = ({ className, totalAmount }) => 
             <Truck size={16} className="mr-2 text-gray-400" /> Доставка:
           </div>
         }
-        value={`${DELIVERY_PRICE}`}
+        value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${DELIVERY_PRICE} ₽`}
       />
       <Button
         type="submit"
