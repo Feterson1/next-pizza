@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from 'react';
 import { Variant } from '../components/shared/groupt-variants';
 import { PizzaSize, PizzaType } from '../constants/pizza';

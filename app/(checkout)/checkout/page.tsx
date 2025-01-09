@@ -6,8 +6,15 @@ import { checkoutFormSchema, checkoutFormValues } from '@/shared/constants';
 import { CheckoutSidebar, Container, Title } from '@/shared/components';
 import { CheckoutCart, CheckoutPersonalForm } from '@/shared/components/shared/checkout';
 import { CheckoutAddressForm } from '@/shared/components/shared/checkout/checkout-address-form';
+import { createOrder } from '@/app/actions';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
+
 export default function CheckoutPage() {
+  const [submitting, setSubmitting] = useState(false);
+
   const { totalAmount, items, updateItemQuantity, removeCartItem, loading } = useCart();
+
   const form = useForm<checkoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
     defaultValues: {
@@ -20,8 +27,23 @@ export default function CheckoutPage() {
     },
   });
 
-  const onSubmit = (data: checkoutFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: checkoutFormValues) => {
+    try {
+      setSubmitting(true);
+
+      const url = await createOrder(data);
+      toast.success('Заказ успешно оформлен! Переход на оплату....', { icon: '✅' });
+      if (url) {
+        location.href = url;
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('Не удалось создать заказ', {
+        icon: '❌',
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
@@ -48,7 +70,7 @@ export default function CheckoutPage() {
             </div>
             {/* Правая часть */}
             <div className="w-[450px]">
-              <CheckoutSidebar totalAmount={totalAmount} loading={loading} />
+              <CheckoutSidebar totalAmount={totalAmount} loading={loading || submitting} />
             </div>
           </div>
         </form>

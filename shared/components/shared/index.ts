@@ -20,5 +20,6 @@ export { CheckoutSidebar } from './checkout-sidebar';
 export { ErrorText } from './error-text';
 export { RequiredSymbol } from './required-symbol';
 export { ClearButton } from './clear-button';
+export * from './email-templates';
 export * from './form-components';
 export * from './modals';
