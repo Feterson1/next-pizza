@@ -10,7 +10,8 @@ import { SearchInput } from './search-input';
 import { CartButton } from './cart-button';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { search } from '@/shared/services/products';
+import { useSession, signIn } from 'next-auth/react';
+import { ProfileButton } from './profile-button';
 
 interface Props {
   hasSearch?: boolean;
@@ -20,12 +21,12 @@ interface Props {
 
 export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart = true }) => {
   const searchParams = useSearchParams();
+
   useEffect(() => {
     if (searchParams.has('paid')) {
       setTimeout(() => {
         toast.success('Заказ успешно оплачен! Информация отправлена на почту.');
       }, 500);
-      console.log(searchParams);
     }
   }, []);
   return (
@@ -48,11 +49,7 @@ export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart =
         )}
         {/* Правая часть */}
         <div className="flex items-center gap-3">
-          <Button variant={'outline'} className="flex items-center gap-1">
-            {' '}
-            <User size={16} />
-            Войти
-          </Button>
+          <ProfileButton onClickSignIn={signIn} />
           {hasCart && <CartButton />}
         </div>
       </Container>
