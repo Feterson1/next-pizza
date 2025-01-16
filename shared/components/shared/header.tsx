@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/shared/lib/utils';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '../ui';
 import { Container } from './container';
@@ -12,6 +12,7 @@ import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useSession, signIn } from 'next-auth/react';
 import { ProfileButton } from './profile-button';
+import { AuthModal } from './modals';
 
 interface Props {
   hasSearch?: boolean;
@@ -21,7 +22,7 @@ interface Props {
 
 export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart = true }) => {
   const searchParams = useSearchParams();
-
+  const [openAuthModal, setOpenAuthModal] = useState(false);
   useEffect(() => {
     if (searchParams.has('paid')) {
       setTimeout(() => {
@@ -49,7 +50,17 @@ export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart =
         )}
         {/* Правая часть */}
         <div className="flex items-center gap-3">
-          <ProfileButton onClickSignIn={signIn} />
+          <AuthModal
+            open={openAuthModal}
+            onClose={() => {
+              setOpenAuthModal(false);
+            }}
+          />
+          <ProfileButton
+            onClickSignIn={() => {
+              setOpenAuthModal(true);
+            }}
+          />
           {hasCart && <CartButton />}
         </div>
       </Container>
