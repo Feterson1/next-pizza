@@ -12,7 +12,7 @@ export const formRegisterSchema = formLoginSchema
   .merge(
     z.object({
       fullName: z.string().min(2, { message: 'Введите имя и фамилию' }),
-      phone: z.string().min(10, { message: 'Введите корректный номер телефона' }),
+      // phone: z.string().min(10, { message: 'Введите корректный номер телефона' }).optional(),
       confirmPassword: passwordSchema,
     }),
   )

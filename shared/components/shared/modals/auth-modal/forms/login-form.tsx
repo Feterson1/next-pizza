@@ -48,7 +48,7 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
           <img src="/assets/images/phone-icon.png" alt="phone-icon" width={60} height={60} />
         </div>
         <FormInput name="email" label="E-mail" requiered />
-        <FormInput name="password" label="Пароль" requiered />
+        <FormInput type="password" name="password" label="Пароль" requiered />
         <Button loading={form.formState.isSubmitting} className="h-12 text-base" type="submit">
           {form.formState.isSubmitting ? 'Вход...' : 'Войти'}
         </Button>
