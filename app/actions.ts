@@ -2,6 +2,7 @@
 
 import { prisma } from '@/prisma/prisma-client';
 import { PayOrderTemplate } from '@/shared/components';
+import { VerificationUserTemplate } from '@/shared/components/shared/email-templates/verification-user';
 import { checkoutFormValues } from '@/shared/constants';
 import { createPayment, sendEmail } from '@/shared/lib';
 import { getUserSession } from '@/shared/lib/get-user-session';
@@ -130,6 +131,39 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
     });
   } catch (error) {
     console.log('Error [UPDATE_USER]', error);
+    throw error;
+  }
+}
+export async function registerUser(body: Prisma.UserCreateInput) {
+  try {
+    const existUser = await prisma.user.findFirst({ where: { email: body.email } });
+    if (existUser) {
+      if (!existUser.verified) {
+        throw new Error('Почта не подтверждена');
+      }
+      throw new Error('Пользователь уже существует');
+    }
+    const createdUser = await prisma.user.create({
+      data: {
+        email: body.email,
+        fullName: body.fullName,
+        password: hashSync(body.password, 10),
+      },
+    });
+    const code = Math.floor(10000 + Math.random() * 900000).toString();
+    await prisma.verificationCode.create({
+      data: {
+        code,
+        userId: createdUser.id,
+      },
+    });
+    await sendEmail(
+      createdUser.email,
+      'Next Pizzaa | Подтверждение регистрации',
+      VerificationUserTemplate({ code }),
+    );
+  } catch (error) {
+    console.log('Error [CREATE_USER]', error);
     throw error;
   }
 }
