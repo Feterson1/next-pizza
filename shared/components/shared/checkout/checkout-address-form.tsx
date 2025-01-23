@@ -1,6 +1,6 @@
+'use client';
 import React from 'react';
 import { WhiteBlock } from '../white-block';
-import { Input } from '../../ui';
 import { FormTextarea } from '../form-components';
 import { AddressInput } from '../address-input';
 import { Controller, useFormContext } from 'react-hook-form';
