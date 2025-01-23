@@ -16,7 +16,7 @@ export default async function Home({ searchParams }: { searchParams: GetSearchPa
         <div className="flex gap-[60px]">
           {/* Фильтрация */}
           <div className="w-[250px]">
-            <Suspense>
+            <Suspense fallback={<div>Загрузка...</div>}>
               <Filters />
             </Suspense>
           </div>

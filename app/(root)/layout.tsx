@@ -14,7 +14,7 @@ export default function HomeLayout({
 }>) {
   return (
     <main className="min-h-screen">
-      <Suspense>
+      <Suspense fallback={<div>Загрузка...</div>}>
         <Header />
       </Suspense>
       {children}

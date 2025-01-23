@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Title } from './title';
 import { Input } from '../ui';
 import { RangeSlider } from './range-slider';
@@ -27,31 +27,35 @@ export const Filters: React.FC<Props> = ({ className }) => {
     <div className={className}>
       <Title text="Фильтрация" size="sm" className="mb-5 font-bold" />
       {/* Верхние чекбоксы */}
-      <CheckboxFiltersGroup
-        title={'Тип теста'}
-        name="pizzaTypes"
-        className="mb-5"
-        items={[
-          { text: 'Тонкое', value: '1' },
-          { text: 'Традиционное ', value: '2' },
-        ]}
-        loading={loading}
-        onClickCheckbox={filters.setPizzaTypes}
-        selected={filters.pizzaTypes}
-      />
-      <CheckboxFiltersGroup
-        title={'Размеры'}
-        name="sizes"
-        className="mb-5"
-        items={[
-          { text: '20см ', value: '20' },
-          { text: '30см ', value: '30' },
-          { text: '40см ', value: '40' },
-        ]}
-        loading={loading}
-        onClickCheckbox={filters.setSizes}
-        selected={filters.sizes}
-      />
+      <Suspense>
+        <CheckboxFiltersGroup
+          title={'Тип теста'}
+          name="pizzaTypes"
+          className="mb-5"
+          items={[
+            { text: 'Тонкое', value: '1' },
+            { text: 'Традиционное ', value: '2' },
+          ]}
+          loading={loading}
+          onClickCheckbox={filters.setPizzaTypes}
+          selected={filters.pizzaTypes}
+        />
+      </Suspense>
+      <Suspense>
+        <CheckboxFiltersGroup
+          title={'Размеры'}
+          name="sizes"
+          className="mb-5"
+          items={[
+            { text: '20см ', value: '20' },
+            { text: '30см ', value: '30' },
+            { text: '40см ', value: '40' },
+          ]}
+          loading={loading}
+          onClickCheckbox={filters.setSizes}
+          selected={filters.sizes}
+        />
+      </Suspense>
       {/* Фильтр цен */}
       <div className="mt-5 border-y border-y-neutral-100 py6 pb-7">
         <p className="font-bold mb-3">Цена от и до:</p>

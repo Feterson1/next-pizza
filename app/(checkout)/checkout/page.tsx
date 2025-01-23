@@ -14,14 +14,14 @@ import { Api } from '@/shared/services/api-client';
 
 export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
+  const { totalAmount, updateItemQuantity, items, removeCartItem, loading } = useCart();
   const { data: session } = useSession();
-  const { totalAmount, items, updateItemQuantity, removeCartItem, loading } = useCart();
 
   const form = useForm<checkoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
     defaultValues: {
       email: '',
-      firstName: session?.user.name || '',
+      firstName: '',
       lastName: '',
       phone: '',
       address: '',
@@ -33,30 +33,36 @@ export default function CheckoutPage() {
     async function fetchUserInfo() {
       const data = await Api.auth.getMe();
       const [firstName, lastName] = data.fullName.split(' ');
+
       form.setValue('firstName', firstName);
       form.setValue('lastName', lastName);
       form.setValue('email', data.email);
     }
+
     if (session) {
       fetchUserInfo();
     }
-  }, [session]);
+  }, [session, form]);
+
   const onSubmit = async (data: checkoutFormValues) => {
     try {
       setSubmitting(true);
 
       const url = await createOrder(data);
-      toast.success('Заказ успешно оформлен! Переход на оплату....', { icon: '✅' });
+
+      toast.error('Заказ успешно оформлен! 📝 Переход на оплату... ', {
+        icon: '✅',
+      });
+
       if (url) {
         location.href = url;
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
+      setSubmitting(false);
       toast.error('Не удалось создать заказ', {
         icon: '❌',
       });
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -68,20 +74,24 @@ export default function CheckoutPage() {
   return (
     <Container className="mt-10">
       <Title text="Оформление заказа" className="font-extrabold mb-8 text-[36px]" />
+
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex gap-10">
             {/* Левая часть */}
             <div className="flex flex-col gap-10 flex-1 mb-20">
               <CheckoutCart
-                items={items}
                 onClickCountButton={onClickCountButton}
                 removeCartItem={removeCartItem}
+                items={items}
                 loading={loading}
               />
+
               <CheckoutPersonalForm className={loading ? 'opacity-40 pointer-events-none' : ''} />
+
               <CheckoutAddressForm className={loading ? 'opacity-40 pointer-events-none' : ''} />
             </div>
+
             {/* Правая часть */}
             <div className="w-[450px]">
               <CheckoutSidebar totalAmount={totalAmount} loading={loading || submitting} />

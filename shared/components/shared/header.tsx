@@ -2,15 +2,12 @@
 import { cn } from '@/shared/lib/utils';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Button } from '../ui';
 import { Container } from './container';
-import { User } from 'lucide-react';
 import Link from 'next/link';
 import { SearchInput } from './search-input';
 import { CartButton } from './cart-button';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { useSession, signIn } from 'next-auth/react';
 import { ProfileButton } from './profile-button';
 import { AuthModal } from './modals';
 
